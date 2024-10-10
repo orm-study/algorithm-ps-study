@@ -36,34 +36,35 @@ import java.util.*;
 class Solution {
     public int solution(int cacheSize, String[] cities) {
    
-		if (cacheSize == 0){
-			return cities.length * 5; //예외처리
+		int answer = 0;
+		if (cacheSize == 0) {
+			return cities.length * 5;
 		}
-
-		int answer = 5;
 
 		Queue<String> q = new LinkedList<>(); // 캐시
 
-		for (int i = 0; i < cities.length; i++) {
-			if (!q.contains(cities[i].toLowerCase())) { // 캐시 미스
+		String[] lowerCities = Arrays.stream(cities)
+			.map(String::toLowerCase)
+			.toArray(String[]::new); // 전처리
+
+		for (int i = 0; i < lowerCities.length; i++) {
+			if (!q.contains(lowerCities[i])) { // 캐시 미스
 				if (q.size() >= cacheSize) { // 캐시 미스이면서 사이즈가 꽉 찼을 경우
 					q.poll();
-					q.offer(cities[i].toLowerCase());
+					q.offer(lowerCities[i]);
 				} else { // 아닐 경우
-					q.offer(cities[i].toLowerCase());
+					q.offer(lowerCities[i]);
 				}
 				answer += 5; // 캐시 미스로 인해 +5
-			} else  {  // 캐시 히트
-				q.remove(cities[i].toLowerCase()); // 삭제해주고
-				q.offer(cities[i].toLowerCase()); // 교체
+			} else {  // 캐시 히트
+				q.remove(lowerCities[i]); // 삭제해주고
+				q.offer(lowerCities[i]); // 교체
 				answer += 1;
 			}
 		}
 		return answer;
 	}
 }
-
-
 
 ```
 
